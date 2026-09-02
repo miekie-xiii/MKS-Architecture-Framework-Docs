@@ -52,8 +52,10 @@ export async function initScriptArchitecture() {
 function renderScript(container, script) {
   container.innerHTML = `<pre><code></code></pre>`;
 
+  const block = container.querySelector("pre");
   const codeBlock = container.querySelector("code");
 
+  block.dataset.script = script;
   codeBlock.textContent = script;
 
   addLineNumbers(container);
