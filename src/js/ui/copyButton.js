@@ -3,7 +3,7 @@ import { showToast } from "./toast.js";
 export function copyButton(content) {
   if (!content) {return;}
   const codeBlocks = content.querySelectorAll("pre");
-  if (!codeBlocks) {return;}
+  if (!codeBlocks.length) {return;}
 
   codeBlocks.forEach((block) => {
     const button = document.createElement("button");
@@ -12,10 +12,9 @@ export function copyButton(content) {
     button.textContent = "Copy";
 
     button.addEventListener("click", async () => {
-      const codeLines = block.querySelectorAll(".codeLine");
-      const code = [...codeLines]
-        .map((line) => line.childNodes[1]?.textContent || "")
-        .join("\n");
+      const code = block.dataset.script;
+      
+      if (!code) {return;}
 
       await navigator.clipboard.writeText(code);
       showToast("Copied");
