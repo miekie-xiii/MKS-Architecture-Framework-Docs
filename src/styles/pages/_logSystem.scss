@@ -1,0 +1,157 @@
+@use "../abstracts/variables" as *;
+
+.logFormatExample {
+  width: 100%;
+  margin: 20px 0 25px;
+  padding: 15px 20px;
+  border: 1px solid $gray0;
+  border-radius: 6px;
+  background: $dark5;
+  
+  code {
+    font-size: $fn3;
+    color: $light0;
+    white-space: pre-wrap;
+  }
+}
+
+.logParts {
+  width: 100%;
+  margin: 25px 0 40px;
+  border: 1px solid $gray0;
+  border-radius: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  background: $dark5;
+
+  th,
+  td {
+    font-size: $fn3;
+    padding: 15px 20px;
+    border-right: 1px solid $gray0;
+    text-align: left;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  thead {
+    background: $dark2;
+
+    th {
+      color: $light0;
+      font-size: $fn3;
+      font-weight: 600;
+    }
+  }
+
+  tbody {
+    td {
+      border-top: 1px solid $gray0;
+      color: $light1;
+      line-height: 1.6;
+    }
+  }
+
+  .logPart {
+    width: 15%;
+    background: $dark5;
+
+    code {
+      color: $light0;
+      font-size: $fn3;
+      font-weight: 600;
+    }
+  }
+
+  .logDescription {
+    width: 85%;
+  }
+}
+
+.logHeader3 {
+  margin: 40px 0 20px;
+  color: $light0;
+  font-size: $fn5;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.logCategories {
+  width: 100%;
+  margin: 0 0 40px;
+  border: 1px solid $gray0;
+  border-radius: 8px;
+  border-collapse: separate;
+  border-spacing: 0;
+  overflow: hidden;
+  background: $dark5;
+
+  th,
+  td {
+    padding: 15px;
+    border-right: 1px solid $gray0;
+    text-align: left;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  thead {
+    background: $dark2;
+
+    th {
+      color: $light0;
+      font-size: $fn3;
+      font-weight: 600;
+    }
+  }
+
+  tbody {
+    td {
+      border-top: 1px solid $gray0;
+      color: $light1;
+      line-height: 1.6;
+      vertical-align: middle;
+    }
+  }
+
+  .logCategory {
+    width: 15%;
+    background: $dark5;
+
+    code {
+      color: $light0;
+      font-size: $fn3;
+      font-weight: 600;
+    }
+  }
+
+  .logDescription {
+    width: 30%;
+  }
+
+  .logDescriptionContent {
+    display: block;
+    font-size: $fn3;
+
+    strong {
+      color: $light0;
+    }
+  }
+
+  .logExample {
+    width: 55%;
+    background: $dark5;
+
+    code {
+      color: $light1;
+      font-size: $fn3;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+  }
+}

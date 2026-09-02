@@ -1,0 +1,72 @@
+@use "../abstracts/variables" as *;
+
+.setupStep {
+  margin-top: 50px;
+
+  .setupContent {
+    width: 100%;
+
+    .parag {
+      margin-bottom: 25px;
+    }
+
+    > img {
+      display: block;
+      width: 100%;
+      max-width: 850px;
+      height: auto;
+      margin: 0 auto;
+      border: 1px solid $gray0;
+      border-radius: 6px;
+      background: $dark5;
+      box-shadow: $shad0;
+    }
+  }
+
+  .setupImages {
+    width: 100%;
+
+    > img {
+      display: block;
+      width: 100%;
+      max-width: 850px;
+      height: auto;
+      margin-bottom: 20px;
+      border: 1px solid $gray0;
+      border-radius: 6px;
+      background: $dark5;
+      box-shadow: $shad0;
+    }
+  }
+
+  .triggerList {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+
+    .trigger {
+      flex: 0 1 300px;
+      padding: 15px;
+      border-radius: 6px;
+      background: $dark5;
+
+      .triggerLabel {
+        margin: 0 0 15px;
+        color: $light0;
+        font-size: $fn3;
+        font-weight: 600;
+        line-height: 1.5;
+      }
+
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border: 1px solid $gray0;
+        border-radius: 4px;
+      }
+    }
+  }
+}

@@ -1,0 +1,374 @@
+
+
+<h1 class="header1">Understanding Logs</h1>
+
+<div class="sectionLine"></div>
+
+<p class="parag">
+  The MKS Architecture Framework uses categorized logs to describe
+  and track server activity.
+</p>
+
+
+<h2 class="header2">Log Format</h2>
+
+<div class="sectionLine"></div>
+
+<p class="parag">
+  Each log follows this format:
+</p>
+
+<div class="logFormatExample">
+  <code>[CATEGORY] ACTOR :: ACTION :: TARGET</code>
+</div>
+
+<p class="parag">
+  The <code class="inlineCode">::</code> symbol acts as a
+  <strong>separator</strong> between the main parts of a log.
+</p>
+
+
+<table class="logParts">
+  <thead>
+    <tr>
+      <th>Part</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td class="logPart"><code>[CATEGORY]</code></td>
+      <td class="logDescription">
+        Describes the type of event being recorded.
+      </td>
+    </tr>
+
+    <tr>
+      <td class="logPart"><code>ACTOR</code></td>
+      <td class="logDescription">
+        Describes the administrator or system that performed the action.
+      </td>
+    </tr>
+
+    <tr>
+      <td class="logPart"><code>ACTION</code></td>
+      <td class="logDescription">
+        Describes the action performed by the administrator or system.
+      </td>
+    </tr>
+
+    <tr>
+      <td class="logPart"><code>TARGET</code></td>
+      <td class="logDescription">
+        Describes the player, administrator, or system affected by the action.
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<h3 class="header3">Example</h3>
+
+<div class="logFormatExample">
+  <code>[PLR] Miekie :: joined :: SERVER</code>
+</div>
+
+
+<h2 class="header2">Log Categories</h2>
+
+<div class="sectionLine"></div>
+
+<p class="parag">
+  Log categories describe the type of event being recorded. Each log
+  begins with a category tag, making server activity easier to describe
+  and understand.
+</p>
+
+
+<h3 class="logHeader3">Server and System Activities</h3>
+
+<table class="logCategories">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr>
+      <td class="logCategory"><code>REQ</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Request.</strong> Records a request sent to the server,
+          such as requesting player data.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[REQ] Miekie :: req &lt;bPl&gt; data :: SERVER</code>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td class="logCategory"><code>NET</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Network.</strong> Records network communication or
+          data sent from the client to the server.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[NET] Miekie :: sent valid &lt;bPl&gt; req :: SERVER</code>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td class="logCategory"><code>SYS</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>System.</strong> Records automatic server or system
+          actions, such as automatically banning a player.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[SYS] SERVER :: AUTO BAN :: Miekie</code>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td class="logCategory"><code>SYNC</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Synchronization.</strong> Records synchronization
+          events, such as renewing the player list.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[SYNC] SERVER :: PLAYER LIST RENEWED :: has ROOT</code>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+<h3 class="logHeader3">Warnings and Errors</h3>
+
+<table class="logCategories">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr>
+      <td class="logCategory"><code>DENY</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Denied.</strong> Records requests or actions that were
+          denied, such as an Admin attempting to ban other Admin.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[DENY] Miekie :: BAN DENIED :: Miekie</code>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td class="logCategory"><code>WRNG</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Warning.</strong> Records potentially problematic or
+          suspicious activity, such as exceeding a request limit.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[WRNG] Miekie :: exceeded req limit &lt;bPl&gt; :: SERVER</code>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td class="logCategory"><code>ERR</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Error.</strong> Records an invalid request, a failed
+          operation, or another unexpected system error.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[ERR] Miekie :: sent INVALID REQUEST :: SERVER</code>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+<h3 class="logHeader3">Administrative Activities</h3>
+
+<table class="logCategories">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr>
+      <td class="logCategory"><code>ACT</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Action.</strong> Records an administrative action
+          performed by an administrator.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[ACT] Miekie :: GO TO :: Player_1</code>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td class="logCategory"><code>WEP</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Weapon.</strong> Records a weapon-related action,
+          such as giving a weapon to a player.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[WEP] Miekie :: GAVE SNIPER :: Player_1</code>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td class="logCategory"><code>RM</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Removal.</strong> Records a player being removed
+          from a list or role.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[RM] Miekie :: REMOVED FROM BAN LIST :: Player_1</code>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td class="logCategory"><code>TMP</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Temporary.</strong> Records actions involving
+          temporary roles or permissions.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[TMP] Miekie :: GRANTED TMP ROOT :: Player1</code>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td class="logCategory"><code>CTRL</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Control.</strong> Records server control or
+          server-management actions.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[CTRL] Miekie :: ENABLED END SERVER :: SERVER</code>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+
+
+<h3 class="logHeader3">Player Activities</h3>
+
+<table class="logCategories">
+  <thead>
+    <tr>
+      <th>Category</th>
+      <th>Description</th>
+      <th>Example</th>
+    </tr>
+  </thead>
+
+  <tbody>
+
+    <tr>
+      <td class="logCategory"><code>PLR</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Player.</strong> Records player-related events,
+          such as a player joining or leaving the server.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[PLR] Player1 :: joined :: SERVER</code>
+      </td>
+    </tr>
+
+
+    <tr>
+      <td class="logCategory"><code>VC</code></td>
+
+      <td class="logDescription">
+        <span class="logDescriptionContent">
+          <strong>Voice Chat.</strong> Records voice chat-related
+          activity.
+        </span>
+      </td>
+
+      <td class="logExample">
+        <code>[VC] Miekie :: USING VOICE CHAT :: SERVER</code>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

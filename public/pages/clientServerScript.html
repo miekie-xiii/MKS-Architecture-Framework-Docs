@@ -1,0 +1,98 @@
+
+<h1 class="header1">Client and Server Script</h1>
+<div class="sectionLine"></div>
+
+<p class="parag">
+  The MKS Architecture Framework uses separate Client and Server
+  scripts that work together to manage the framework's systems. The Client
+  handles player-side features and interface elements, while the Server handles
+  administrative logic, permissions, validation, and other server-side systems.
+</p>
+
+<p class="parag">
+  You can customize the framework to fit your needs. You are free to
+  study the scripts, modify existing systems, remove features you do not
+  need, or expand the framework with your own functionality. You can adapt the
+  MKS Architecture Framework to fit the specific requirements of your map or
+  project.
+</p>
+
+<h3 class="header3">Set Trigger Coordinates</h3>
+
+<p class="parag">
+  If you have not set up the triggers yet, follow the
+  <a href="#/pages/setupGuide.html">Setup Guide</a>
+  before setting the trigger coordinates below.
+</p>
+
+<form class="scriptForm">
+  <fieldset class="formGroup">
+    <legend>Revive / Team Switch</legend>
+
+    <div class="coordinateInputs">
+      <input type="number" id="reviveTeamSwitchX" name="reviveTeamSwitchX" placeholder="X" autocomplete="off" step="any" aria-label="X coordinate">
+      <input type="number" id="reviveTeamSwitchY" name="reviveTeamSwitchY" placeholder="Y" autocomplete="off" step="any" aria-label="Y coordinate">
+      <input type="number" id="reviveTeamSwitchZ" name="reviveTeamSwitchZ" placeholder="Z" autocomplete="off" step="any" aria-label="Z coordinate">
+    </div>
+  </fieldset>
+
+  <fieldset class="formGroup">
+    <legend>Minigun</legend>
+
+    <div class="coordinateInputs">
+      <input type="number" id="minigunX" name="minigunX" placeholder="X" autocomplete="off" step="any" aria-label="X coordinate">
+      <input type="number" id="minigunY" name="minigunY" placeholder="Y" autocomplete="off" step="any" aria-label="Y coordinate">
+      <input type="number" id="minigunZ" name="minigunZ" placeholder="Z" autocomplete="off" step="any" aria-label="Z coordinate">
+    </div>
+  </fieldset>
+
+  <fieldset class="formGroup">
+    <legend>Slimer</legend>
+
+    <div class="coordinateInputs">
+      <input type="number" id="slimerX" name="slimerX" placeholder="X" autocomplete="off" step="any" aria-label="X coordinate">
+      <input type="number" id="slimerY" name="slimerY" placeholder="Y" autocomplete="off" step="any" aria-label="Y coordinate">
+      <input type="number" id="slimerZ" name="slimerZ" placeholder="Z" autocomplete="off" step="any" aria-label="Z coordinate">
+    </div>
+  </fieldset>
+
+  <fieldset class="formGroup">
+    <legend>War Machine</legend>
+
+    <div class="coordinateInputs">
+      <input type="number" id="warMachineX" name="warMachineX" placeholder="X" autocomplete="off" step="any" aria-label="X coordinate">
+      <input type="number" id="warMachineY" name="warMachineY" placeholder="Y" autocomplete="off" step="any" aria-label="Y coordinate">
+      <input type="number" id="warMachineZ" name="warMachineZ" placeholder="Z" autocomplete="off" step="any" aria-label="Z coordinate">
+    </div>
+  </fieldset>
+
+  <fieldset class="formGroup">
+    <legend>Build Tool</legend>
+
+    <div class="coordinateInputs">
+      <input type="number" id="buildToolX" name="buildToolX" placeholder="X" autocomplete="off" step="any" aria-label="X coordinate">
+      <input type="number" id="buildToolY" name="buildToolY" placeholder="Y" autocomplete="off" step="any" aria-label="Y coordinate">
+      <input type="number" id="buildToolZ" name="buildToolZ" placeholder="Z" autocomplete="off" step="any" aria-label="Z coordinate">
+    </div>
+  </fieldset>
+
+  <button type="submit" class="formButton">Save</button>
+</form>
+
+<div class="toast" role="status" aria-live="polite"></div>
+
+<h3 class="header3">Configured Scripts</h3>
+<p class="parag">
+  After setting the trigger coordinates and pasting the scripts into your map, press <code>M</code> to open the
+  Admin Panel and <code>L</code> to expand the Mini Log.
+</p>
+<section class="scriptCode">
+  <nav class="scriptTabs">
+    <button class="scriptTab active" data-target="clientScript">Client</button>
+    <button class="scriptTab" data-target="serverScript">Server</button>
+  </nav>
+  <div class="scriptBase">
+    <section id="clientScript" class="scriptPanel active"></section>
+    <section id="serverScript" class="scriptPanel"></section>
+  </div>
+</section>

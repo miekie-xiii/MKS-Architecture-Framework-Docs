@@ -1,0 +1,63 @@
+@use "../abstracts/variables" as *;
+
+.reportBox {
+  width: 100%;
+  margin-top: 25px;
+  padding: 20px 25px;
+  border: 1px solid $gray0;
+  border-radius: 6px;
+  box-sizing: border-box;
+  background: $dark5;
+
+  .reportList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin: 0;
+    padding-left: 10px;
+    color: $light1;
+    list-style: none;
+
+    li {
+      font-size: $fn4;
+      padding-left: 5px;
+      line-height: 1.7;
+
+      strong {
+        color: $light0;
+        font-weight: 600;
+      }
+
+      &::marker {
+        color: $light2;
+      }
+    }
+  }
+}
+
+.joinBtn {
+  margin: 30px 0 0;
+  text-align: center;
+
+  a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 160px;
+    padding: 12px 24px;
+    border: 1px solid $light1;
+    border-radius: 6px;
+    background: $dark3;
+    color: $light0;
+    font-size: $fn4;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      background: $dark4;
+      color: $light0;
+      transform: translateY(-1px);
+    }
+  }
+}

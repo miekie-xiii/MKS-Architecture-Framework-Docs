@@ -1,0 +1,142 @@
+<h1 class="header1">Admin Permissions</h1>
+
+<div class="sectionLine"></div>
+
+<p class="parag">
+  The MKS Architecture Framework uses a hierarchical permission
+  system to control which players an administrators can manage.
+  Permission checks are based on both the role of the actor and the
+  role or status of the target.
+</p>
+
+
+<h2 class="header2">Permission Hierarchy</h2>
+
+<div class="sectionLine"></div>
+
+<p class="parag">
+  Higher-level administrative roles can manage lower-level players,
+  while protected players cannot be targeted by players with equal or
+  lower permission levels.
+</p>
+
+<section class="permissionHierarchy">
+  <div class="permissionScroll">
+    <table class="permissionTable">
+      <thead>
+        <tr>
+          <th class="permissionCorner">Roles</th>
+          <th>Normal Player<br>(Target)</th>
+          <th>Admin/Temp Admin<br>(Target)</th>
+          <th>Temporary Root<br>(Target)</th>
+          <th>Protected Player<br>(Target)</th>
+          <th>Root<br>(Target)</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr>
+          <td class="permissionRole">
+            <strong>Admin/Temp Admin</strong>
+          </td>
+          <td class="permissionAllow"><span>Allow</span></td>
+          <td class="permissionDeny"><span>Deny</span></td>
+          <td class="permissionDeny"><span>Deny</span></td>
+          <td class="permissionDeny"><span>Deny</span></td>
+          <td class="permissionDeny"><span>Deny</span></td>
+        </tr>
+
+        <tr>
+          <td class="permissionRole">
+            <strong>Temporary Root</strong>
+          </td>
+          <td class="permissionAllow"><span>Allow</span></td>
+          <td class="permissionAllow"><span>Allow</span></td>
+          <td class="permissionDeny"><span>Deny</span></td>
+          <td class="permissionDeny"><span>Deny</span></td>
+          <td class="permissionDeny"><span>Deny</span></td>
+        </tr>
+
+        <tr>
+          <td class="permissionRole">
+            <strong>Root</strong>
+          </td>
+          <td class="permissionAllow"><span>Allow</span></td>
+          <td class="permissionAllow"><span>Allow</span></td>
+          <td class="permissionAllow"><span>Allow</span></td>
+          <td class="permissionAllow"><span>Allow</span></td>
+          <td class="permissionDeny"><span>Deny</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<h2 class="header2">Role Permissions</h2>
+
+<div class="sectionLine"></div>
+
+<h3 class="header3">Admin and Temporary Admin</h3>
+
+<p class="parag">
+  Admin and Temporary Admin players can perform administrative
+  actions against Normal Players. They cannot target other
+  administrative players, Temporary Root players, Protected
+  Players, or Root players.
+</p>
+
+
+<h3 class="header3">Temporary Root</h3>
+
+<p class="parag">
+  Temporary Root players have a higher permission level than
+  Admin and Temporary Admin players. They can target Normal Players
+  and Admin or Temporary Admin players, but cannot target other
+  Temporary Root players, Protected Players, or Root players.
+</p>
+
+
+<h3 class="header3">Root</h3>
+
+<p class="parag">
+  Root players have the highest administrative authority in the
+  permission hierarchy. They can target Normal Players, Admin
+  players, Temporary Admin players, Temporary Root players, and
+  Protected Players. However, Root players cannot target other Root
+  players.
+</p>
+
+<p class="parag">
+  This prevents Root-level players from modifying or removing players
+  with the same highest-level authority.
+</p>
+
+
+<h2 class="header2">Protected Players</h2>
+
+<div class="sectionLine"></div>
+
+<p class="parag">
+  Protected Players are Normal Players with immunity against
+  administrative actions. They cannot be targeted by Admin,
+  Temporary Admin, or Temporary Root players. Only Root players can
+  perform administrative actions against a Protected Player.
+</p>
+
+
+<h2 class="header2">Permission Check</h2>
+
+<div class="sectionLine"></div>
+
+<p class="parag">
+  Before an administrative action is performed, the system validates
+  the actor's permission level against the target's role or protection
+  status. If the actor does not have the required permission, the
+  action is denied.
+</p>
+<h3 class="header3">Example</h3>
+
+<div class="logFormatExample">
+  <code>[DENY] Miekie :: BAN DENIED :: Guest_1</code>
+</div>

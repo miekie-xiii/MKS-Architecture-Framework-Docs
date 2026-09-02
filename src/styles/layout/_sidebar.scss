@@ -1,0 +1,48 @@
+@use "../abstracts/variables" as *;
+
+.sidebar {
+  position: fixed;
+  top: 40px;
+  left: 0;
+  width: 270px;
+  height: calc(100vh - 50px);
+  padding: 30px 15px;
+  box-sizing: border-box;
+  border-right: 1px solid $gray0;
+  background: $dark5;
+  font-size: $fn4;
+
+  a {
+    position: relative;
+    display: block;
+    margin: 2px 0;
+    padding: 10px 15px;
+    border-radius: 5px;
+    color: $light1;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+
+    &:hover {
+      background: $dark3;
+      color: $light0;
+    }
+
+    &.active {
+      background: $dark4;
+      color: $light0;
+      font-weight: 600;
+
+      &::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: -15px;
+        width: 3px;
+        height: 60%;
+        border-radius: 0 3px 3px 0;
+        background: $light0;
+        transform: translateY(-50%);
+      }
+    }
+  }
+}

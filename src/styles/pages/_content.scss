@@ -1,0 +1,75 @@
+@use "../abstracts/variables" as *;
+
+.content {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 50px;
+  box-sizing: border-box;
+  color: $light0;
+  font-size: $fn3;
+  line-height: 1.7;
+
+  .header1 {
+    margin: 0 0 20px;
+    color: $light0;
+    font-size: $fn13;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+
+  .header2 {
+    margin: 50px 0 20px;
+    color: $light0;
+    font-size: $fn8;
+    font-weight: 700;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+  }
+  .header3 {
+    margin: 0 0 20px;
+    color: $light0;
+    font-size: $fn5;
+    font-weight: 700;
+    line-height: 1.4;
+  }
+
+  .sectionLine {
+    width: 100%;
+    height: 1px;
+    margin: 0 0 10px;
+    background: $gray0;
+  }
+
+  .parag {
+    max-width: 1000px;
+    margin: 0 0 24px;
+    color: $light1;
+    font-size: $fn4;
+    line-height: 1.8;
+    code {
+      padding: 1px 5px;
+      border: 1px solid $gray0;
+      border-radius: 5px;
+      background: $dark5;
+    }
+    a {
+      color: $light0;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s ease, border-color 0.2s ease;
+
+      &:hover {
+        border-color: $light2;
+      }
+    }
+  }
+  .inlineCode {
+    padding: 1px 5px;
+    border: 1px solid $gray0;
+    border-radius: 5px;
+    background: $dark5;
+  }
+}

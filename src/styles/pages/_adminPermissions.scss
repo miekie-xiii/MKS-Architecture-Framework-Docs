@@ -1,0 +1,113 @@
+@use "../abstracts/variables" as *;
+
+.permissionHierarchy {
+  width: 100%;
+  margin: 30px 0 70px;
+  border: 1px solid $gray0;
+  border-radius: 8px;
+  overflow: hidden;
+  background: $dark5;
+
+  .permissionScroll {
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  .permissionTable {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    th,
+    td {
+      border-right: 1px solid $gray0;
+    }
+
+    th:last-child,
+    td:last-child {
+      border-right: none;
+    }
+
+    thead {
+      background: $dark2;
+
+      th {
+        padding: 15px 10px;
+        color: $light0;
+        font-size: $fn3;
+        font-weight: 600;
+        line-height: 1.5;
+        text-align: center;
+      }
+    }
+
+    tbody {
+      td {
+        padding: 16px 10px;
+        border-top: 1px solid $gray0;
+        color: $light1;
+        text-align: center;
+      }
+    }
+
+    .permissionCorner {
+      background: $dark2;
+    }
+
+    .permissionRole {
+      background: $dark2;
+      color: $light0;
+      text-align: center;
+    }
+    // .permissionAllow {
+    //   span {
+    //     display: inline-flex;
+    //     align-items: center;
+    //     justify-content: center;
+    //     min-width: 60px;
+    //     padding: 4px 10px;
+    //     border-radius: 4px;
+    //     background: rgba(70, 150, 100, 0.15);
+    //     color: $light0;
+    //     font-size: $fn2;
+    //     font-weight: 600;
+    //   }
+    // }
+
+    // .permissionDeny {
+    //   span {
+    //     display: inline-flex;
+    //     align-items: center;
+    //     justify-content: center;
+    //     min-width: 60px;
+    //     padding: 4px 10px;
+    //     border-radius: 4px;
+    //     background: rgba(180, 70, 70, 0.15);
+    //     color: $light0;
+    //     font-size: $fn2;
+    //     font-weight: 600;
+    //   }
+    // }
+  }
+}
+
+.logFormatExample {
+  width: 100%;
+  margin: 20px 0 0;
+  padding: 15px;
+  border: 1px solid $gray0;
+  border-radius: 6px;
+  background: $dark5;
+
+  box-sizing: border-box;
+
+  code {
+    display: block;
+    color: $light1;
+    font-size: $fn3;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+}
