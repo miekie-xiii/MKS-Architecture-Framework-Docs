@@ -1,6 +1,6 @@
 # Server Script 
 # Miekie KrunkerScript Architecture Framework
-# MKS AF v0.8.8
+# MKS AF v0.9.0
 
 # -MKS ARCHITECTURE FRAMEWORK-
 
@@ -17,7 +17,7 @@ str[] bnPlrCon=str["xatrao","xatroa","cldb","xotrao"]; # ban players with names 
 str[] banLs=str[]; # ban list
 str[] mtLs=str[]; # mute list
 
-str[] root=str["root123"]; # root list
+str[] root=str["Miekie"]; # root list
 str[] admin=str["admin123"]; # admin list
 str[] tmpRo=str[]; # temp root
 str[] tmpAd=str[]; # temp admin
@@ -660,6 +660,7 @@ str[] currNkr=str[];
 str[] revNkr=str[];
 num rspwnChk=0;
 obj[] nukeKill=obj[];
+bool actNkLmt=false;
 action recPlrNuke(str pId) {
  for(num i=0;i<lengthOf plrNuke;i++){if((str)plrNuke[i].pID==pId){(num)plrNuke[i].nk+=1;netSd("nkC",{c:(num)plrNuke[i].nk},pId);return;}}addTo plrNuke {pID:pId,nk:1};netSd("nkC",{c:1},pId);
 }
@@ -673,8 +674,11 @@ action procNK() {
   if(!(bool)p.active){remove nukeKill[i];continue;}(num)p.health-=100000;(num)nukeKill[i].t=GAME.TIME.now()+250;}
 }
 action procEndNuke(str pId,obj p) {
- #if(inStrLs(revNkr,pId)){schedNK(pId);rmFrStrLs(revNkr, pId);}rmFrStrLs(currNkr,pId);
- for(num i=0;i<lengthOf plrNuke;i++){if((str)plrNuke[i].pID==pId&&(num)plrNuke[i].nk>nkLmt){schedNK(pId);GAME.CHAT.broadcast((str)p.accountName+" exceeded the nuke limit.","#ff4444");break;}}
+ if(inStrLs(revNkr,pId)){schedNK(pId);rmFrStrLs(revNkr, pId);}rmFrStrLs(currNkr,pId);
+ if(actNkLmt){
+  for(num i=0;i<lengthOf plrNuke;i++){if((str)plrNuke[i].pID==pId&&(num)plrNuke[i].nk>nkLmt){schedNK(pId);
+  GAME.CHAT.broadcast((str)p.accountName+" exceeded the nuke limit.","#ff4444");break;}} 
+ }
  nukeAct=false;
 }
 # nuke limit & revNuke & force respawn system
@@ -714,7 +718,7 @@ public action onPlayerDeath(str id, str killerID) {
 public action onCustomTrigger(str pId,str customParam,num value) {
  obj p=fnByID(pId);
  if(!notEmpty p){return;}
- if(customParam=="nukeStart"){nukeAct=true;recPlrNuke(pId);}#procNkr(pId);
+ if(customParam=="nukeStart"){nukeAct=true;recPlrNuke(pId);}procNkr(pId);
  if(customParam=="nukeEnd"){procEndNuke(pId,p);}
 }
 action plrVC(obj p) {str aAcc=(str)p.accountName;if(aAcc==""){aAcc=(str)p.username;}logR("VC",aAcc+" :: USING VOICE CHAT :: SERVER");}

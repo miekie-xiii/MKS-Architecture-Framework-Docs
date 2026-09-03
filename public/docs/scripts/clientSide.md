@@ -1,6 +1,6 @@
 # Client Script 
 # Miekie KrunkerScript Architecture Framework
-# MKS AF v0.8.8
+# MKS AF v0.9.0
 
 # -MKS ARCHITECTURE FRAMEWORK-
 
@@ -461,6 +461,8 @@ num myNukeCount=0;
 bool showNukeHUD=false;
 num nkLmt=5;
 num nukeWarnUntil=0;
+bool showWarn=false;
+num nkWarn=0;
 action renderNukeCount() {
  obj size=GAME.OVERLAY.getSize();
 
@@ -511,8 +513,7 @@ action renderNukeWarn() {
   ovRect(x,y+boxH-5,boxW,5,0,"#ff4444",1);
  }
 }
-bool showWarn=true;
-num nkWarn=0;
+
 action renderNukeLimitWarn() {
  if(GAME.TIME.now()>=nkWarn){return;}
 
@@ -619,6 +620,7 @@ action updLogSize() {
   updDIV("mkLogClose","display","block");
  }
  else {
+  if(!showNukeHUD){lgML=440;}
   updDIV("mkLogBg","display","none");
   updDIV("mkMiniLog","left",toStr(lgML)+"px");
   updDIV("mkMiniLog","top","auto");
@@ -793,7 +795,7 @@ public action render(num delta) {
 # Player spawns in
 public action onPlayerSpawn(str id) {
  obj p=GAME.PLAYERS.findByID(id);
- if(notEmpty p&&(bool)p.isYou){showNukeHUD=false;if(showWarn){nkWarn=GAME.TIME.now()+10000;showWarn=false;}}
+ if(notEmpty p&&(bool)p.isYou){if(showNukeHUD){showNukeHUD=true;}else{showNukeHUD=false;}if(showWarn){nkWarn=GAME.TIME.now()+10000;showWarn=false;}}
 }
 
 # Player died
