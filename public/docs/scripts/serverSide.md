@@ -1,6 +1,6 @@
 # Server Script 
 # Miekie KrunkerScript Architecture Framework
-# MKS AF v0.9.0
+# MKS AF v1.0.0
 
 # -MKS ARCHITECTURE FRAMEWORK-
 
@@ -352,6 +352,8 @@ bool action isNameBefore(str a,str b){
 }
 bool action renewPlrLs(){
  rnPlrLs=true;
+ plrJn=false;
+ plrLf=false;
  obj[] ps=GAME.PLAYERS.list();
  str[] nLs=str[];
  str[] nIDs=str[];
