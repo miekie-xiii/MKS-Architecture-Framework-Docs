@@ -1,6 +1,5 @@
-# Client Script 
-# Miekie KrunkerScript Architecture Framework
-# MKS AF v1.0.0
+# MKS AF v1.0.3
+# Client Script | Miekie KrunkerScript Architecture Framework
 
 # -MKS ARCHITECTURE FRAMEWORK-
 
@@ -458,11 +457,12 @@ action toggAdPan() {
 
 # nuke limit system
 num myNukeCount=0;
-bool showNukeHUD=false;
+bool showNukeHUD=true;
 num nkLmt=5;
 num nukeWarnUntil=0;
-bool showWarn=false;
+bool showWarn=true;
 num nkWarn=0;
+bool togNL=false;
 action renderNukeCount() {
  obj size=GAME.OVERLAY.getSize();
 
@@ -760,12 +760,6 @@ public action start() {
  crtAdmPnl();
  crtAdList();
  crtAdRyt();
-
- crtLogBg();
- crtMiniLog();
- crtLogClose();
-
- logExpanded = false;
 }
 
 # Runs every game tick
@@ -786,22 +780,22 @@ public action update(num delta) {
 public action render(num delta) {
  rndrcht();
  if(svrEndShow){updDIV("mkSvrEnd","display","block");}else{updDIV("mkSvrEnd","display","none");}
- if(showNukeHUD){renderNukeCount();}
+ if(togNL){renderNukeCount();}
  renderNukeWarn();
  renderSvrEnd();
- renderNukeLimitWarn();
+ if(showWarn){renderNukeLimitWarn();}
 }
 
 # Player spawns in
 public action onPlayerSpawn(str id) {
  obj p=GAME.PLAYERS.findByID(id);
- if(notEmpty p&&(bool)p.isYou){if(showNukeHUD){showNukeHUD=true;}else{showNukeHUD=false;}if(showWarn){nkWarn=GAME.TIME.now()+10000;showWarn=false;}}
+ if(notEmpty p&&(bool)p.isYou){if(showNukeHUD){togNL=true;}if(showWarn){nkWarn=GAME.TIME.now()+10000;showWarn=false;}}
 }
 
 # Player died
 public action onPlayerDeath(str id,str killerID) {
  obj p=GAME.PLAYERS.findByID(id);
- if(notEmpty p&&(bool)p.isYou){showNukeHUD=false;}
+ if(notEmpty p&&(bool)p.isYou){togNL=false;}
 }
 
 # User pressed a key
@@ -841,6 +835,7 @@ public action onDIVClicked(str id) {
 # Client receives network message
 public action onNetworkMessage(str id,obj data) {
  if(id=="nkC"){myNukeCount=(num)data.c;if(myNukeCount>=nkLmt){nukeWarnUntil=GAME.TIME.now()+10000;}}
+ if(id=="nkL"){bool aNL=(bool)data.s;nkLmt=(num)data.l;togNL=aNL;showNukeHUD=aNL;showWarn=aNL;crtLogBg();crtMiniLog();crtLogClose();}
  if(id=="clP"){procAd();}
  if(id=="sc"){svrEndShow=(bool)data.c;}
  if(id=="sID"){assgSess(data);}

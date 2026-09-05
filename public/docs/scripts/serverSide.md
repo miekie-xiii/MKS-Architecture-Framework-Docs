@@ -1,15 +1,15 @@
-# Server Script 
-# Miekie KrunkerScript Architecture Framework
-# MKS AF v1.0.0
+# MKS AF v1.0.3
+# Server Script | Miekie KrunkerScript Architecture Framework
 
 # -MKS ARCHITECTURE FRAMEWORK-
 
-# TRIGGER LOCATIONS
-num rnX={{REVIVE_TEAM_SWITCH_X}};num rnY={{REVIVE_TEAM_SWITCH_Y}};num rnZ={{REVIVE_TEAM_SWITCH_Z}}; # REV NUKE
-num mgnX={{MINIGUN_X}};num mgnY={{MINIGUN_Y}};num mgnZ={{MINIGUN_Z}}; # MINIGUN
-num slmX={{SLIMER_X}};num slmY={{SLIMER_Y}};num slmZ={{SLIMER_Z}}; # SLIMER
-num wmnX={{WAR_MACHINE_X}};num wmnY={{WAR_MACHINE_Y}};num wmnZ={{WAR_MACHINE_Z}}; # WAR MACHINE
-num bltX={{BUILD_TOOL_X}};num bltY={{BUILD_TOOL_Y}};num bltZ={{BUILD_TOOL_Z}}; # BUILD TOOL
+# --SETTINGS--
+# trigger coordinates
+num rnX=510;num rnY=110;num rnZ=-6474; # REV NUKE
+num mgnX=542;num mgnY=110;num mgnZ=-6474; # MINIGUN
+num slmX=574;num slmY=110;num slmZ=-6474; # SLIMER
+num wmnX=606;num wmnY=110;num wmnZ=-6474; # WAR MACHINE
+num bltX=638;num bltY=110;num bltZ=-6474; # BUILD TOOL
 num wepID=1;
 
 # mute and ban lists
@@ -17,11 +17,17 @@ str[] bnPlrCon=str["xatrao","xatroa","cldb","xotrao"]; # ban players with names 
 str[] banLs=str[]; # ban list
 str[] mtLs=str[]; # mute list
 
+# nuke limit
+num nkLmt=5; # limit number
+bool actNkLmt=true; # deactivated if false
+
 str[] root=str["Miekie"]; # root list
 str[] admin=str["admin123"]; # admin list
 str[] tmpRo=str[]; # temp root
 str[] tmpAd=str[]; # temp admin
 str[] protAcc=str["protectedAccount123"]; # protected accounts
+
+# --SETTINGS--
 
 str[] btnIDs=str["mkAdBtnPlrs","mkAdBtnMt","mkAdBtnBn","mkAdBtnTAd","mkAdBtnTRo","mkAdBtnCon","mkAdBtnOth"];
 str[] toolIDs=str["mkAdRytKick","mkAdRytBan","mkAdRytRevive","mkAdRytMute","mkAdRytGoTo","mkAdRytBring","mkAdRytPts500","mkAdRytPts1000","mkAdRytTempAd","mkAdRytTempRo"];
@@ -430,7 +436,7 @@ action syncPlrLs(str type,str id){
  if(pAc==""){ls=false;pAc=(str)p.username;}
  if(type=="pl"){
   for(num i=0;i<lengthOf plrLsID;i++){if(plrLsID[i]==pId){f=true;break;}}
-  if(!f){logR("PLR",(str)p.username+" :: joined :: SERVER");if(rnPlrLs){plrJn=true;return;}addTo plrLs pAc;addTo plrLsID pId;addTo objPlr {i:pId,n:pAc};}
+  if(!f){logR("PLR",pAc+" :: joined :: SERVER");if(rnPlrLs){plrJn=true;return;}addTo plrLs pAc;addTo plrLsID pId;addTo objPlr {i:pId,n:pAc};netSd("nkL",{l:nkLmt,s:actNkLmt},pId);}
  }
  for(num j=0;j<lengthOf adSess;j++){
   if(type=="pl"){if(!f){netSd("plA",{n:pAc},(str)adSess[j].id);}}
@@ -656,13 +662,11 @@ action procAdCon(str id,obj data,str pID) {
 
 # nuke limit & revNuke & force respawn system
 obj[] plrNuke=obj[];
-num nkLmt=5;
 bool nukeAct=false;
 str[] currNkr=str[];
 str[] revNkr=str[];
 num rspwnChk=0;
 obj[] nukeKill=obj[];
-bool actNkLmt=false;
 action recPlrNuke(str pId) {
  for(num i=0;i<lengthOf plrNuke;i++){if((str)plrNuke[i].pID==pId){(num)plrNuke[i].nk+=1;netSd("nkC",{c:(num)plrNuke[i].nk},pId);return;}}addTo plrNuke {pID:pId,nk:1};netSd("nkC",{c:1},pId);
 }

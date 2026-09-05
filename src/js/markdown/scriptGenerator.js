@@ -9,28 +9,29 @@ export async function loadTemplate(path) {
 }
 
 export function generateScript(template, config) {
-  const replacements = {
-    "{{REVIVE_TEAM_SWITCH_X}}": config.reviveTeamSwitchX,
-    "{{REVIVE_TEAM_SWITCH_Y}}": config.reviveTeamSwitchY,
-    "{{REVIVE_TEAM_SWITCH_Z}}": config.reviveTeamSwitchZ,
-    "{{MINIGUN_X}}": config.minigunX,
-    "{{MINIGUN_Y}}": config.minigunY,
-    "{{MINIGUN_Z}}": config.minigunZ,
-    "{{SLIMER_X}}": config.slimerX,
-    "{{SLIMER_Y}}": config.slimerY,
-    "{{SLIMER_Z}}": config.slimerZ,
-    "{{WAR_MACHINE_X}}": config.warMachineX,
-    "{{WAR_MACHINE_Y}}": config.warMachineY,
-    "{{WAR_MACHINE_Z}}": config.warMachineZ,
-    "{{BUILD_TOOL_X}}": config.buildToolX,
-    "{{BUILD_TOOL_Y}}": config.buildToolY,
-    "{{BUILD_TOOL_Z}}": config.buildToolZ
+  const variables = {
+    rnX: config.reviveTeamSwitchX,
+    rnY: config.reviveTeamSwitchY,
+    rnZ: config.reviveTeamSwitchZ,
+    mgnX: config.minigunX,
+    mgnY: config.minigunY,
+    mgnZ: config.minigunZ,
+    slmX: config.slimerX,
+    slmY: config.slimerY,
+    slmZ: config.slimerZ,
+    wmnX: config.warMachineX,
+    wmnY: config.warMachineY,
+    wmnZ: config.warMachineZ,
+    bltX: config.buildToolX,
+    bltY: config.buildToolY,
+    bltZ: config.buildToolZ
   };
 
   let output = template;
 
-  Object.entries(replacements).forEach(([placeholder, value]) => {
-    output = output.replaceAll(placeholder, String(value));
+  Object.entries(variables).forEach(([variable, value]) => {
+    const regex = new RegExp(`(num\\s+${variable}=)[^;]+`, "g");
+    output = output.replace(regex, `$1${value}`);
   });
 
   return output;
