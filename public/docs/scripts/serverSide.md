@@ -21,11 +21,12 @@ str[] mtLs=str[]; # mute list
 num nkLmt=5; # limit number
 bool actNkLmt=true; # deactivated if false
 
+# admin account configuration
 str[] root=str["Miekie"]; # root list
-str[] admin=str["admin123"]; # admin list
+str[] admin=str["Sunnypatni112"]; # admin list
 str[] tmpRo=str[]; # temp root
 str[] tmpAd=str[]; # temp admin
-str[] protAcc=str["protectedAccount123"]; # protected accounts
+str[] protAcc=str["Miekie"]; # protected accounts
 
 # --SETTINGS--
 
