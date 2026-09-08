@@ -13,7 +13,6 @@ export function copyButton(content) {
 
     button.addEventListener("click", async () => {
       const code = block.dataset.script;
-      
       if (!code) {return;}
 
       await navigator.clipboard.writeText(code);

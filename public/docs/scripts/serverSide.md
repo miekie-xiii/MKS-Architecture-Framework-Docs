@@ -725,7 +725,7 @@ public action onPlayerDeath(str id, str killerID) {
 public action onCustomTrigger(str pId,str customParam,num value) {
  obj p=fnByID(pId);
  if(!notEmpty p){return;}
- if(customParam=="nukeStart"){nukeAct=true;recPlrNuke(pId);}procNkr(pId);
+ if(customParam=="nukeStart"){nukeAct=true;recPlrNuke(pId);procNkr(pId);}
  if(customParam=="nukeEnd"){procEndNuke(pId,p);}
 }
 action plrVC(obj p) {str aAcc=(str)p.accountName;if(aAcc==""){aAcc=(str)p.username;}logR("VC",aAcc+" :: USING VOICE CHAT :: SERVER");}
