@@ -1,5 +1,6 @@
-# MKS AF v1.0.3
-# Client Script | Miekie KrunkerScript Architecture Framework
+# MKS AF v2.0.0
+# Client Script 
+# Miekie KrunkerScript Architecture Framework
 
 # -MKS ARCHITECTURE FRAMEWORK-
 
@@ -49,7 +50,8 @@ str[] adminButtonIDs=str[];str[] adminButtonLabels=str[];
 str[] toolIDs=str[];str[] toolLabels=str[];str[] lmgs=str[];str[] smgs=str[];str[] rifles=str[];str[] launchers=str[];str[] pistols=str[];str[] shotguns=str[];str[] special=str[];str[] tools=str[];
 
 str lnHght="line-height:42px;";
-str[] toolBg=str["rgba(168,56,65,1)","rgba(153,29,36,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(20,144,170,1)","rgba(20,144,170,1)"];
+str[] toolBg=str["rgba(168,56,65,1)","rgba(153,29,36,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)",
+ "rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(20,144,170,1)","rgba(20,144,170,1)"];
 str bgBtn="rgba(17,19,42,1)";
 num adRytFlash=0;
 num adWepFlash=0;
@@ -58,6 +60,18 @@ bool useHdCht=true;
 bool chtRvl=false;
 str chtDisp="none";
 bool isMuted=true;
+
+bool jPr=false;
+num jTm=0;
+num jCnt=0;
+num jCd=0;
+bool tog=true;
+bool isFlying=false;
+bool wPr=false;
+bool s=false;
+num sTm=0;
+num sDir=0;
+bool sprint=false;
 
 action ovRect(num x,num y,num w,num h,num r,str c,num o){GAME.OVERLAY.drawRect(x,y,w,h,r,c,o);}
 action ovTxt(str t,num x,num y,num r,num s,str a,str c,num o){GAME.OVERLAY.drawText(t,x,y,r,s,a,c,o);}
@@ -136,16 +150,18 @@ action selAdRyt(str id,str act,str lbl) {
 }
 
 action procAdRytAct(str id) {
- if(id=="mkAdRytKick"){selAdRyt(id,"kc","KICK");return;}
- if(id=="mkAdRytBan"){selAdRyt(id,"bn","BAN");return;}
- if(id=="mkAdRytMute"){selAdRyt(id,"mt","MUTE");return;}
- if(id=="mkAdRytRevive"){selAdRyt(id,"rv","REVIVE");return;}
- if(id=="mkAdRytGoTo"){selAdRyt(id,"gt","GO TO");return;}
- if(id=="mkAdRytBring"){selAdRyt(id,"bm","BRING ME");return;}
- if(id=="mkAdRytPts500"){selAdRyt(id,"5h","+100pts");return;}
- if(id=="mkAdRytPts1000"){selAdRyt(id,"1t","+1000pts");return;}
- if(id=="mkAdRytTempAd"){selAdRyt(id,"ta","TEMP ADMIN");return;}
- if(id=="mkAdRytTempRo"){selAdRyt(id,"tr","TEMP ROOT");return;}
+ if(id=="RytKick"){selAdRyt(id,"kc","KICK");return;}
+ if(id=="RytBan"){selAdRyt(id,"bn","BAN");return;}
+ if(id=="RytMute"){selAdRyt(id,"mt","MUTE");return;}
+ if(id=="RytRevive"){selAdRyt(id,"rv","REVIVE");return;}
+ if(id=="RytGoTo"){selAdRyt(id,"gt","GO TO");return;}
+ if(id=="RytBring"){selAdRyt(id,"bm","BRING ME");return;}
+ if(id=="RytKill"){selAdRyt(id,"kl","+1000pts");return;}
+ if(id=="RytFly"){selAdRyt(id,"fl","+1000pts");return;}
+ if(id=="RytPts500"){selAdRyt(id,"5h","+100pts");return;}
+ if(id=="RytPts1000"){selAdRyt(id,"1t","+1000pts");return;}
+ if(id=="RytTempAd"){selAdRyt(id,"ta","TEMP ADMIN");return;}
+ if(id=="RytTempRo"){selAdRyt(id,"tr","TEMP ROOT");return;}
 
  if(id=="mkAdRytMuteAction"){selAdRyt(id,"rM","REMOVE");return;}
  if(id=="mkAdRytBanAction"){selAdRyt(id,"rB","REMOVE");return;}
@@ -186,21 +202,22 @@ action adActNTools() {
 
  crtDIV("mkAdRytTools",true,"position:absolute;left:0;top:170px;width:100%;height:260px;box-sizing:border-box;","mkAdRytBox");
  crtDIV("mkAdRytToolTitle",true,"position:absolute;left:20px;top:0;width:280px;height:20px;box-sizing:border-box;"+fnC+fnS2+ff+"line-height:20px;pointer-events:none;","mkAdRytTools");
- updDIVTxt("mkAdRytToolTitle","ADMIN TOOLS");
+ updDIVTxt("mkAdRytToolTitle","TOOLS");
 
  for(num i=0;i<lengthOf toolIDs;i++) {num row=i-(i%2);crtAdRytBtn(toolIDs[i],toolLabels[i],20+((i%2)*150),30+(row*25),toolBg[i],fnS2);}
  if(r!="ro"&&r!="tr"){return;}
- crtDIV("mkAdRytWeaponTitle",true,"position:absolute;left:20px;top:300px;width:280px;height:20px;box-sizing:border-box;"+fnC+fnS2+ff+"line-height:20px;pointer-events:none;","mkAdRytTools");
- updDIVTxt("mkAdRytWeaponTitle","ADMIN WEAPONS");
 
- crtAdRytWep("LMGs",lmgs,20,330);
- crtAdRytWep("SMGs",smgs,170,330);
- crtAdRytWep("RIFLES",rifles,20,470);
- crtAdRytWep("LAUNCHERS",launchers,170,470);
- crtAdRytWep("PISTOLS",pistols,20,710);
- crtAdRytWep("SHOTGUNS",shotguns,170,660);
- crtAdRytWep("TOOLS",tools,20,1100);
- crtAdRytWep("SPECIAL",special,170,800);
+ num y=380;
+ crtDIV("mkAdRytWeaponTitle",true,"position:absolute;left:20px;top:"+toStr(y-30)+"px;width:280px;height:20px;box-sizing:border-box;"+fnC+fnS2+ff+"line-height:20px;pointer-events:none;","mkAdRytTools");
+ updDIVTxt("mkAdRytWeaponTitle","WEAPONS");
+ crtAdRytWep("LMGs",lmgs,20,y);
+ crtAdRytWep("SMGs",smgs,170,y);
+ crtAdRytWep("RIFLES",rifles,20,y+140);
+ crtAdRytWep("LAUNCHERS",launchers,170,y+140);
+ crtAdRytWep("PISTOLS",pistols,20,y+380);
+ crtAdRytWep("SHOTGUNS",shotguns,170,y+330);
+ crtAdRytWep("TOOLS",tools,20,y+770);
+ crtAdRytWep("SPECIAL",special,170,y+470);
 }
 
 action adRytRmAct(str id) {crtDIV(id,true,"position:absolute;left:95px;top:170px;width:130px;height:40px;box-sizing:border-box;"+bg2+brd+brdRad+fnC+fnS2+txAlgCen+lnHght+"cursor:pointer;pointer-events:auto;","mkAdRytBox");updDIVTxt(id,"REMOVE");}
@@ -419,7 +436,7 @@ action crtAdmPnl() {
  crtDIV("mkAdExt",true,"display:none;position:fixed;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0);cursor:default;"+z,"");
  crtDIV("mkAdPnl",true,"display:none;position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:1280px;height:720px;"+bg+brd+brdRad1+bx+z,"");
  crtDIV("mkAdTtl",true,ps+"left:0;top:28px;width:1280px;height:32px;"+txAlgCen+"color:"+txC+fnS+"pointer-events:none;","mkAdPnl");
- updDIVTxt("mkAdTtl","MK ADMIN PANEL");
+ updDIVTxt("mkAdTtl","MKS ADMIN PANEL");
  str[] id=str["mkAdLft","mkAdCen","mkAdRyt"];
  num[] x=num[20,340,940];num[] w=num[300,580,320];
  for(num i=0;i<lengthOf id;i++){crtDIV(id[i],true,st+"left:"+toStr(x[i])+"px;top:80px;width:"+toStr(w[i])+"px;height:620px;"+bg1+brd+cr,"mkAdPnl");}
@@ -778,14 +795,54 @@ public action update(num delta) {
 
 # Add rendering logic in here
 public action render(num delta) {
+ if(isFlying){
+ obj size=GAME.OVERLAY.getSize();num x=(num)size.width/2;num y=(num)size.height-20;
+ GAME.OVERLAY.drawText("Double tap SPACE to fly. Double tap W A S D to boost",x,y,0,12,"center","#FFFFFF",0.8);
+ }
  rndrcht();
  if(svrEndShow){updDIV("mkSvrEnd","display","block");}else{updDIV("mkSvrEnd","display","none");}
  if(togNL){renderNukeCount();}
  renderNukeWarn();
  renderSvrEnd();
  if(showWarn){renderNukeLimitWarn();}
+
 }
 
+public action onPlayerUpdate(str id,num delta,obj inputs) {
+ obj p=GAME.PLAYERS.findByID(id);
+ if(!notEmpty p||!(bool)p.isYou){return;}
+
+ num yaw=(num)p.rotation.x;
+ num pitch=(num)p.rotation.y;
+ num movDir=(num)inputs.movDir;
+ num x=0;
+ num y=0.0015;
+ num z=0;
+ bool jump=(bool)inputs.jump;
+ bool ground=(bool)p.onGround;
+ bool d=(str)inputs.movDir!="undefined"&&(movDir==0||movDir==-Math.PI/2||movDir==Math.PI/2||movDir==Math.PI||movDir==-Math.PI/4||movDir==-3*Math.PI/4||movDir==Math.PI/4||movDir==3*Math.PI/4);
+ num now=GAME.TIME.now();
+
+ if(!isFlying){jPr=false;jTm=0;jCnt=0;jCd=0;tog=false;wPr=false;s=false;sTm=0;sDir=0;sprint=false;return;}
+ if(ground){jPr=false;jTm=0;jCnt=0;}
+ if(jump&&!jPr&&!ground){jPr=true;
+  if(now>=jCd){
+   if(jTm==0||now-jTm>=400){jTm=now;jCnt=1;}else{jCnt++;}
+   if(jCnt==2){tog=!tog;GAME.NETWORK.send("fJ",{j:tog});jTm=0;jCnt=0;wPr=false;s=false;sTm=0;sDir=0;sprint=false;}
+  }
+ }
+
+ if(!jump){jPr=false;}
+ if(!d){wPr=false;sprint=false;}
+ else if(!wPr){if(s&&movDir==sDir&&now-sTm<400){sprint=true;}else{s=true;sTm=now;sDir=movDir;}wPr=true;}
+ if(s&&now-sTm>=400){s=false;}
+ num speed=sprint?0.30:0.10;
+ if(!tog){return;}
+ if((str)inputs.movDir!="undefined"){num a=yaw+Math.PI-movDir-Math.PI/2;num c=speed;x=Math.sin(a)*c;z=Math.cos(a)*c;y=Math.sin(pitch)*(0-Math.sin(movDir))*speed;}
+ if(!ground&&jump){y=0.12;}
+ if((bool)inputs.crouch){y=-0.12;}
+ p.velocity.x=x;p.velocity.y=y;p.velocity.z=z;
+}
 # Player spawns in
 public action onPlayerSpawn(str id) {
  obj p=GAME.PLAYERS.findByID(id);
@@ -847,6 +904,46 @@ public action onNetworkMessage(str id,obj data) {
  if(id=="bnA"||id=="mtA"){procPlrUpd(id,data);return;}
  if(id=="rM"||id=="rB"){procPlrUpd(id,data);return;}
  if(id=="rTA"||id=="rTR"){procPlrUpd(id,data);return;}
+if(id=="fl"){
+ bool v=(bool)data.f;
+
+ isFlying=v;
+ tog=v;
+
+ jPr=false;
+ jTm=0;
+ jCnt=0;
+ jCd=0;
+
+ wPr=false;
+ s=false;
+ sTm=0;
+ sDir=0;
+ sprint=false;
+
+ return;
+}
+
+if(id=="tg"){
+ tog=(bool)data.t;
+
+
+ jTm=0;
+ jCnt=0;
+
+ wPr=false;
+ s=false;
+ sTm=0;
+ sDir=0;
+ sprint=false;
+
+ return;
+}
+
+if(id=="sp"){
+ sprint=(bool)data.s;
+ return;
+}
  if(id=="taA"||id=="trA"){procPlrUpd(id,data);return;}
  if(id=="mtM"){isMuted=(bool)data.b;chtRvl=!isMuted;return;}
  if(inStrLs(conNetIDs,id)){

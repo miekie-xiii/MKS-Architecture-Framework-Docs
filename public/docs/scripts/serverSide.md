@@ -1,10 +1,10 @@
-# MKS AF v1.0.3
-# Server Script | Miekie KrunkerScript Architecture Framework
+# MKS AF v2.0.0
+# Server Script 
+# Miekie KrunkerScript Architecture Framework
 
 # -MKS ARCHITECTURE FRAMEWORK-
 
-# --SETTINGS--
-# trigger coordinates
+# TRIGGER LOCATIONS
 num rnX=510;num rnY=110;num rnZ=-6474; # REV NUKE
 num mgnX=542;num mgnY=110;num mgnZ=-6474; # MINIGUN
 num slmX=574;num slmY=110;num slmZ=-6474; # SLIMER
@@ -17,21 +17,18 @@ str[] bnPlrCon=str["xatrao","xatroa","cldb","xotrao"]; # ban players with names 
 str[] banLs=str[]; # ban list
 str[] mtLs=str[]; # mute list
 
-# nuke limit
-num nkLmt=5; # limit number
-bool actNkLmt=true; # deactivated if false
+# nuke limit settings
+num nkLmt=5;
+bool actNkLmt=false;
 
-# admin account configuration
 str[] root=str["Miekie"]; # root list
-str[] admin=str["Sunnypatni112"]; # admin list
+str[] admin=str["admin123"]; # admin list
 str[] tmpRo=str[]; # temp root
 str[] tmpAd=str[]; # temp admin
-str[] protAcc=str["Miekie"]; # protected accounts
-
-# --SETTINGS--
+str[] protAcc=str["protectedAccount123"]; # protected accounts
 
 str[] btnIDs=str["mkAdBtnPlrs","mkAdBtnMt","mkAdBtnBn","mkAdBtnTAd","mkAdBtnTRo","mkAdBtnCon","mkAdBtnOth"];
-str[] toolIDs=str["mkAdRytKick","mkAdRytBan","mkAdRytRevive","mkAdRytMute","mkAdRytGoTo","mkAdRytBring","mkAdRytPts500","mkAdRytPts1000","mkAdRytTempAd","mkAdRytTempRo"];
+str[] toolIDs=str["RytKick","RytBan","RytRevive","RytMute","RytGoTo","RytBring","RytKill","RytFly","RytPts500","RytPts1000","RytTempAd","RytTempRo"];
 str[] lmgs=str["MACHINE GUN","MINIGUN"];
 str[] smgs=str["SUBMACHINE GUN","AKIMBO UZI"];
 str[] rifles=str["SNIPER RIFLE","ASSAULT RIFLE","FAMAS","SEMI AUTO"];
@@ -47,10 +44,10 @@ str[] dsCnNtIDs=str["rGL","rSL","rMG","rES"];
 str[] conEnab=str[];
 str[] btnLbls=str["PLAYERS","MUTE","BAN","TEMP ADMIN","TEMP ROOT","CONTROLS","OTHERS"];
 str[] btn=str["bPl","bMt","bBn","bTAd","bTRo","bCn"];
-str[] toolLbls=str["KICK","BAN","REVIVE","MUTE","GO TO","BRING ME","+500pts","+1000pts","TEMP ADMIN","TEMP ROOT","GAVE"];
-str[] actStr=str["kc","bn","rv","mt","gt","bm","5h","1t","ta","tr","aW"];
-str[] rmAct=str["","rM","rB","rTA","rTR"];
-str[] isGrdedAct=str["mt","ta","tr","kc","bn"];
+str[] toolLbls=str["KICK","BAN","REVIVE","MUTE","GO TO","BRING ME","KILL","FLY","+500pts","+1000pts","TEMP ADMIN","TEMP ROOT","GAVE",""];
+str[] actStr=str["kc","bn","rv","mt","gt","bm","kl","fl","5h","1t","ta","tr","aW","fJ"];
+str[] rmAct=str["rM","rB","kl","rTA","rTR"];
+str[] isGrdedAct=str["mt","kl","ta","tr","kc","bn"];
 str[] logCat=str["ACT","REQ","DENY","WEP","NET","WRNG","ERR","RM","TMP","CTRL","SYS","PLR","VC","SYNC"];
 
 # controls
@@ -65,8 +62,8 @@ num[] adBtn=num[0]; # admin & tmp root/admin
 num[] adTool=num[0,1,4,5,3]; # admin & tmp admin
 
 num[] rtBtn=num[0,1,2,3,4,5]; # root only
-num[] rtTool=num[0,1,2,3,4,5,6,7,8,9]; # root
-num[] trTool=num[0,1,2,3,4,5,6,7]; # tmp root
+num[] rtTool=num[0,1,2,3,4,5,6,7,8,9,10,11]; # root
+num[] trTool=num[0,1,2,3,4,5,6,7,8,9]; # tmp root
 
 num[] lmgi=num[6,25];
 num[] smgi=num[3,9];
@@ -89,6 +86,7 @@ str[] logHis=str[];
 obj[] objPlr=obj[];
 str[] plrLs=str[];
 str[] plrLsID=str[];
+obj[] flyIDs=obj[];
 
 obj action fnByID(str id){return GAME.PLAYERS.findByID(id);}
 obj[] action allPlr(){return GAME.PLAYERS.list();}
@@ -511,7 +509,6 @@ action rmPlrFromLs(str id,obj data,str pID) {
 action adTpPlr(str id,obj a,obj t,str aAcc,str tAcc) {
  if(id=="gt"){a.position.x=t.position.x;a.position.y=t.position.y;a.position.z=t.position.z;}
  if(id=="bm"){t.position.x=a.position.x;t.position.y=a.position.y;t.position.z=a.position.z;}
- logR("ACT",aAcc+" :: "+(id=="gt"?"GO TO":"BRING ME")+" :: "+tAcc);
 }
 
 action grantTmpRole(str role,str sAcc,str tAcc,str tID,str aID) {
@@ -593,30 +590,36 @@ action procSvPlrLoc(){
   svPlrLoc[i].at=GAME.TIME.now()+100;(num)svPlrLoc[i].try+=1;
  }
 }
-
+str action gtNm(obj t){if((str)t.accountName==""){return (str)t.username;}return t.accountName;}
 action procAdAct(str id,obj data,str pID) {
  str sId=(str)data.sI; # admin's sess id
  str sdr=pID; # sender's id
  if(!verAd(sdr,sId)){return;}
-
  str tUsr=(str)data.tU;
  str tID=fnIdByName(tUsr); # target's id
  if(tID==""){return;}
-
  obj a=fnByID(pID);obj t=fnByID(tID);
  if(!notEmpty a||!notEmpty t){return;}
- str aAcc=(str)a.accountName;str tAcc=(str)t.accountName;
  bool bLs=true;
- if(tAcc==""){bLs=false;tAcc=(str)t.username;}
+ if((str)t.accountName==""){bLs=false;}
+ str aAcc=gtNm(a);str tAcc=gtNm(t);
  str act=retStr(actStr,id,toolLbls);
  str cat="ACT";
  if(id=="aW"){str w=(str)data.w;giveWep(t,aAcc,w,tAcc);cat="WEP";act+=" "+w;}
  if(id=="rv"){setPlrTeam(t);}
  if(id=="gt"||id=="bm"){adTpPlr(id,a,t,aAcc,tAcc);}
+ if(id=="fl"){
+bool fly=false;
+for(num i=0;i<lengthOf flyIDs;i++){
+ if((str)flyIDs[i].id==tID){remove flyIDs[i];act="DISABLED "+act;netSd("fl",{f:false},tID);fly=true;break;}
+}
+if(!fly){addTo flyIDs {id:tID,tog:true,jPr:false,jTm:0,jCnt:0,jCd:0,wPr:false,s:false,sTm:0,sDir:0,sprint:false};act="ENABLED "+act;netSd("fl",{f:true},tID);}
+ }
  if(id=="5h"){(num)t.score+=500;}
  if(id=="1t"){(num)t.score+=1000;}
  if(inStrLs(isGrdedAct, id)) {
   if(!procActPerm(aAcc,id,tAcc)){return;}
+  if(id=="kl"){(num)t.health-=10000;}
   if(id=="mt"){if(!inStrLs(mtLs,tAcc)){addTo mtLs tAcc;syncPlrLs(id,tID);netSd("mtM",{b:true},tID);}}
   if(id=="ta"||id=="tr"){if(isRoot(aAcc)){grantTmpRole(id,aAcc,tAcc,tID, pID);return;}}
   if(id=="kc"){GAME.ADMIN.kick(tID);act+="ED";}
@@ -706,6 +709,45 @@ public action update(num delta) {
  updPlrLs();
 }
 
+
+public action onPlayerUpdate(str id,num delta,obj inputs) {
+ obj p=GAME.PLAYERS.findByID(id);
+ if(!notEmpty p){return;}
+ num yaw=(num)p.rotation.x;
+ num pitch=(num)p.rotation.y;
+ num movDir=(num)inputs.movDir;
+ num x=0;num y=0.0015;num z=0;num i=0;
+ bool jump=(bool)inputs.jump;
+ bool ground=(bool)p.onGround;
+ bool d=(str)inputs.movDir!="undefined"&&(movDir==0||movDir==-Math.PI/2||movDir==Math.PI/2||movDir==Math.PI||movDir==-Math.PI/4||movDir==-3*Math.PI/4||movDir==Math.PI/4||movDir==3*Math.PI/4);
+ num now=GAME.TIME.now();
+ while(i<lengthOf flyIDs){if((str)flyIDs[i].id==id){break;}i++;}
+ if(i==lengthOf flyIDs){return;}
+ if(ground){flyIDs[i].jPr=false;flyIDs[i].jTm=0;flyIDs[i].jCnt=0;}
+ if(jump&&!flyIDs[i].jPr&&!ground){
+  flyIDs[i].jPr=true;
+  if(now>=(num)flyIDs[i].jCd){if((num)flyIDs[i].jTm==0||now-(num)flyIDs[i].jTm>=400){flyIDs[i].jTm=now;flyIDs[i].jCnt=1;}else{(num)flyIDs[i].jCnt++;}}
+ }
+ if(!jump){flyIDs[i].jPr=false;}
+ if(!d){
+  flyIDs[i].wPr=false;
+  if((bool)flyIDs[i].sprint){flyIDs[i].sprint=false;netSd("sp",{s:false},id);}
+  else{flyIDs[i].sprint=false;}
+ }
+ else if(!(bool)flyIDs[i].wPr){
+  if((bool)flyIDs[i].s&&movDir==(num)flyIDs[i].sDir&&now-(num)flyIDs[i].sTm<400){flyIDs[i].sprint=true;netSd("sp",{s:true},id);}
+  else{flyIDs[i].s=true;flyIDs[i].sTm=now;flyIDs[i].sDir=movDir;
+  }
+  flyIDs[i].wPr=true;
+ }
+ if((bool)flyIDs[i].s&&now-(num)flyIDs[i].sTm>=400){flyIDs[i].s=false;}
+ num speed=(bool)flyIDs[i].sprint?0.30:0.10;
+ if(!flyIDs[i].tog){return;}
+ if((str)inputs.movDir!="undefined"){num a=yaw+Math.PI-movDir-Math.PI/2;num c=speed;x=Math.sin(a)*c;z=Math.cos(a)*c;y=Math.sin(pitch)*(0-Math.sin(movDir))*speed;}
+ if(!ground&&jump){y=0.12;}
+ if((bool)inputs.crouch){y=-0.12;}
+ p.velocity.x=x;p.velocity.y=y;p.velocity.z=z;
+}
 # Player spawns in
 public action onPlayerSpawn(str id) {
  obj p=fnByID(id);
@@ -736,6 +778,15 @@ public action onNetworkMessage(str id,obj data,str pID) {
  if(!notEmpty p){return;}
  if(!allowReq(pID)){if(!rlLogged(pID)){logR("WRNG",(str)p.accountName+" :: exceeded req limit <"+id+"> :: SERVER");}return;}
  if(id=="v"){plrVC(p);return;}
+ if(id=="fJ"){
+  bool found=false;
+  for(num i=0;i<lengthOf flyIDs;i++){
+   if((str)flyIDs[i].id==pID){
+    found=true;flyIDs[i].tog=(bool)data.j;flyIDs[i].jTm=0;flyIDs[i].jCnt=0;flyIDs[i].wPr=false;flyIDs[i].s=false;flyIDs[i].sTm=0;flyIDs[i].sDir=0;flyIDs[i].sprint=false;
+    netSd("tg",{t:(bool)flyIDs[i].tog},pID);netSd("sp",{s:false},pID);break;
+   }
+  }str tAcc=gtNm(p);if(!found){logR("DENY",tAcc+" :: Unauthorized fly request :: SERVER");}return;
+ }
  num vld=validAdPkt(id,data,p);
  if(vld==0){return;}
  logR("NET",(str)p.accountName+" :: sent valid <"+id+"> req :: SERVER");
