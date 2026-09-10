@@ -1,4 +1,4 @@
-# MKS AF v2.7.0
+# MKS AF v2.8.0
 # Client Script 
 # Miekie KrunkerScript Architecture Framework
 
@@ -832,7 +832,11 @@ public action onPlayerUpdate(str id,num delta,obj inputs) {
   else{jCnt=1;jTm=now;}
  }
  if(!jump){jPr=false;}
- if(!wPr){
+ if(!d){
+  wPr=false;
+  if(sprint){sprint=false;GAME.NETWORK.send("fJ",{s:0.10});}
+ }
+ else if(!wPr){
   if(s&&movDir==sDir&&now-sTm<400){sprint=true;GAME.NETWORK.send("fJ",{s:0.30});}
   else{s=true;sTm=now;sDir=movDir;}
   wPr=true;
@@ -841,8 +845,8 @@ public action onPlayerUpdate(str id,num delta,obj inputs) {
  num speed=sprint?0.30:0.10;
  if(!tog){return;}
  if((str)inputs.movDir!="undefined"){
-  num a=yaw+Math.PI-movDir-Math.PI/2;num c=speed;
-  x=Math.sin(a)*c;z=Math.cos(a)*c;y=Math.sin(pitch)*(0-Math.sin(movDir))*speed;
+  num a=yaw+Math.PI-movDir-Math.PI/2;num c=speed;num cp=Math.cos(pitch);
+  x=Math.sin(a)*cp*c;z=Math.cos(a)*cp*c;y=Math.sin(pitch)*(0-Math.sin(movDir))*speed;
  }
  if(!ground&&jump){y=0.12;}
  if((bool)inputs.crouch){y=-0.12;}

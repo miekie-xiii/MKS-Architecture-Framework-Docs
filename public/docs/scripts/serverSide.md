@@ -1,4 +1,4 @@
-# MKS AF v2.7.0
+# MKS AF v2.8.0
 # Server Script 
 # Miekie KrunkerScript Architecture Framework
 
@@ -756,8 +756,8 @@ public action onPlayerUpdate(str id,num delta,obj inputs) {
  num speed=(bool)f.sprint?0.30:0.10;
  if(!f.tog){return;}
  if((str)inputs.movDir!="undefined"){
-  num a=yaw+Math.PI-movDir-Math.PI/2;num c=speed;
-  x=Math.sin(a)*c;z=Math.cos(a)*c;y=Math.sin(pitch)*(0-Math.sin(movDir))*speed;
+  num a=yaw+Math.PI-movDir-Math.PI/2;num c=speed;num cp=Math.cos(pitch);
+  x=Math.sin(a)*cp*c;z=Math.cos(a)*cp*c;y=Math.sin(pitch)*(0-Math.sin(movDir))*speed;
  }
  if(!ground&&jump){y=0.12;}
  if((bool)inputs.crouch){y=-0.12;}
