@@ -1,4 +1,4 @@
-# MKS AF v2.0.0
+# MKS AF v2.5.8
 # Client Script 
 # Miekie KrunkerScript Architecture Framework
 
@@ -65,14 +65,13 @@ bool jPr=false;
 num jTm=0;
 num jCnt=0;
 num jCd=0;
-bool tog=true;
+bool tog=false;
 bool isFlying=false;
 bool wPr=false;
 bool s=false;
 num sTm=0;
-num sDir=0;
+num sDir=0;	
 bool sprint=false;
-
 action ovRect(num x,num y,num w,num h,num r,str c,num o){GAME.OVERLAY.drawRect(x,y,w,h,r,c,o);}
 action ovTxt(str t,num x,num y,num r,num s,str a,str c,num o){GAME.OVERLAY.drawText(t,x,y,r,s,a,c,o);}
 
@@ -815,34 +814,48 @@ public action onPlayerUpdate(str id,num delta,obj inputs) {
  num yaw=(num)p.rotation.x;
  num pitch=(num)p.rotation.y;
  num movDir=(num)inputs.movDir;
- num x=0;
- num y=0.0015;
- num z=0;
+ num x=0;num y=0.0015;num z=0;
  bool jump=(bool)inputs.jump;
  bool ground=(bool)p.onGround;
  bool d=(str)inputs.movDir!="undefined"&&(movDir==0||movDir==-Math.PI/2||movDir==Math.PI/2||movDir==Math.PI||movDir==-Math.PI/4||movDir==-3*Math.PI/4||movDir==Math.PI/4||movDir==3*Math.PI/4);
  num now=GAME.TIME.now();
-
  if(!isFlying){jPr=false;jTm=0;jCnt=0;jCd=0;tog=false;wPr=false;s=false;sTm=0;sDir=0;sprint=false;return;}
  if(ground){jPr=false;jTm=0;jCnt=0;}
- if(jump&&!jPr&&!ground){jPr=true;
-  if(now>=jCd){
-   if(jTm==0||now-jTm>=400){jTm=now;jCnt=1;}else{jCnt++;}
-   if(jCnt==2){tog=!tog;GAME.NETWORK.send("fJ",{j:tog});jTm=0;jCnt=0;wPr=false;s=false;sTm=0;sDir=0;sprint=false;}
+ if(jump&&!jPr&&!ground){
+  jPr=true;
+  if(jCnt==0){jCnt=1;jTm=now;}
+  else if(now-(num)jTm<400){
+   jCnt=0;jTm=0;tog=(bool)!tog;
+   GAME.NETWORK.send("fJ",{j:tog});
+   wPr=false;s=false;sTm=0;sDir=0;sprint=false;
   }
+  else{jCnt=1;jTm=now;}
  }
-
  if(!jump){jPr=false;}
- if(!d){wPr=false;sprint=false;}
- else if(!wPr){if(s&&movDir==sDir&&now-sTm<400){sprint=true;}else{s=true;sTm=now;sDir=movDir;}wPr=true;}
+ if(!wPr){
+  if(s&&movDir==sDir&&now-sTm<400){sprint=true;GAME.NETWORK.send("fJ",{s:0.30});}
+  else{s=true;sTm=now;sDir=movDir;}
+  wPr=true;
+ }
  if(s&&now-sTm>=400){s=false;}
  num speed=sprint?0.30:0.10;
  if(!tog){return;}
- if((str)inputs.movDir!="undefined"){num a=yaw+Math.PI-movDir-Math.PI/2;num c=speed;x=Math.sin(a)*c;z=Math.cos(a)*c;y=Math.sin(pitch)*(0-Math.sin(movDir))*speed;}
+ if((str)inputs.movDir!="undefined"){
+  num a=yaw+Math.PI-movDir-Math.PI/2;num c=speed;
+  x=Math.sin(a)*c;z=Math.cos(a)*c;y=Math.sin(pitch)*(0-Math.sin(movDir))*speed;
+ }
  if(!ground&&jump){y=0.12;}
  if((bool)inputs.crouch){y=-0.12;}
- p.velocity.x=x;p.velocity.y=y;p.velocity.z=z;
+ num accel=0.01;num decel=0.01;
+ if((num)p.velocity.x<x){(num)p.velocity.x+=accel;if((num)p.velocity.x>x){p.velocity.x=x;}}
+ else if((num)p.velocity.x>x){(num)p.velocity.x-=decel;if((num)p.velocity.x<x){p.velocity.x=x;}}
+ if((num)p.velocity.y<y){(num)p.velocity.y+=accel;if((num)p.velocity.y>y){p.velocity.y=y;}}
+ else if((num)p.velocity.y>y){(num)p.velocity.y-=decel;if((num)p.velocity.y<y){p.velocity.y=y;}}
+ if((num)p.velocity.z<z){(num)p.velocity.z+=accel;if((num)p.velocity.z>z){p.velocity.z=z;}}
+ else if((num)p.velocity.z>z){(num)p.velocity.z-=decel;if((num)p.velocity.z<z){p.velocity.z=z;}}
 }
+
+
 # Player spawns in
 public action onPlayerSpawn(str id) {
  obj p=GAME.PLAYERS.findByID(id);
@@ -904,46 +917,14 @@ public action onNetworkMessage(str id,obj data) {
  if(id=="bnA"||id=="mtA"){procPlrUpd(id,data);return;}
  if(id=="rM"||id=="rB"){procPlrUpd(id,data);return;}
  if(id=="rTA"||id=="rTR"){procPlrUpd(id,data);return;}
-if(id=="fl"){
- bool v=(bool)data.f;
-
- isFlying=v;
- tog=v;
-
- jPr=false;
- jTm=0;
- jCnt=0;
- jCd=0;
-
- wPr=false;
- s=false;
- sTm=0;
- sDir=0;
- sprint=false;
-
- return;
-}
-
-if(id=="tg"){
- tog=(bool)data.t;
-
-
- jTm=0;
- jCnt=0;
-
- wPr=false;
- s=false;
- sTm=0;
- sDir=0;
- sprint=false;
-
- return;
-}
-
-if(id=="sp"){
- sprint=(bool)data.s;
- return;
-}
+ if(id=="fl"||id=="tg"){
+  if(id=="fl"){isFlying=(bool)data.f;}
+  tog=(bool)data.t;
+  jPr=false;jTm=0;jCnt=0;jCd=0;
+  wPr=false;s=false;sTm=0;sDir=0;sprint=false;
+  return;
+ }
+ if(id=="sp"){sprint=(bool)data.s;return;}
  if(id=="taA"||id=="trA"){procPlrUpd(id,data);return;}
  if(id=="mtM"){isMuted=(bool)data.b;chtRvl=!isMuted;return;}
  if(inStrLs(conNetIDs,id)){

@@ -1,4 +1,4 @@
-# MKS AF v2.0.0
+# MKS AF v2.5.8
 # Server Script 
 # Miekie KrunkerScript Architecture Framework
 
@@ -283,13 +283,14 @@ action rlTime(num delta) {
 
 num action validAdPkt(str id,obj data,obj p) {
  if((str)data.sI==""){return 0;}
-
+ if(id=="fJ"){return 6;}
  if(inStrLs(conNetIDs,id)||inStrLs(dsCnNtIDs,id)){return 4;}
  if(inStrLs(btn,id)){return 1;}
 
  if((str)data.tU==""&&(str)data.w==""){return 0;}
  if(inStrLs(actStr,id)){return 2;}
  if(inStrLs(rmAct,id)){return 3;}
+ if(id=="v"){return 5;}
  logR("ERR",(str)p.accountName+" :: sent INVALID <"+id+"> net req :: Server");
  return 0;
 }
@@ -609,11 +610,10 @@ action procAdAct(str id,obj data,str pID) {
  if(id=="rv"){setPlrTeam(t);}
  if(id=="gt"||id=="bm"){adTpPlr(id,a,t,aAcc,tAcc);}
  if(id=="fl"){
-bool fly=false;
-for(num i=0;i<lengthOf flyIDs;i++){
- if((str)flyIDs[i].id==tID){remove flyIDs[i];act="DISABLED "+act;netSd("fl",{f:false},tID);fly=true;break;}
-}
-if(!fly){addTo flyIDs {id:tID,tog:true,jPr:false,jTm:0,jCnt:0,jCd:0,wPr:false,s:false,sTm:0,sDir:0,sprint:false};act="ENABLED "+act;netSd("fl",{f:true},tID);}
+  bool fly=false;
+  for(num i=0;i<lengthOf flyIDs;i++){if((str)flyIDs[i].id==tID){remove flyIDs[i];act="DISABLED "+act;fly=true;break;}}
+  if(!fly){addTo flyIDs {id:tID,tog:false,jPr:false,jTm:0,jCnt:0,jCd:0,wPr:false,s:false,sTm:0,sDir:0,sprint:false};act="ENABLED "+act;}
+  netSd("fl",{f:!fly,t:false},tID);
  }
  if(id=="5h"){(num)t.score+=500;}
  if(id=="1t"){(num)t.score+=1000;}
@@ -709,7 +709,16 @@ public action update(num delta) {
  updPlrLs();
 }
 
-
+action chFly(str id){
+ for(num i=0;i<lengthOf flyIDs;i++){
+  if((str)flyIDs[i].id==id){
+   obj f=flyIDs[i];
+   f.tog=false;f.jPr=false;f.jTm=0;f.jCnt=0;f.jCd=0;f.wPr=false;f.s=false;f.sTm=0;f.sDir=0;f.sprint=false;
+   netSd("fl",{f:true,t:false},id);netSd("sp",{s:false},id);
+   return;
+  }
+ }
+}
 public action onPlayerUpdate(str id,num delta,obj inputs) {
  obj p=GAME.PLAYERS.findByID(id);
  if(!notEmpty p){return;}
@@ -723,31 +732,44 @@ public action onPlayerUpdate(str id,num delta,obj inputs) {
  num now=GAME.TIME.now();
  while(i<lengthOf flyIDs){if((str)flyIDs[i].id==id){break;}i++;}
  if(i==lengthOf flyIDs){return;}
- if(ground){flyIDs[i].jPr=false;flyIDs[i].jTm=0;flyIDs[i].jCnt=0;}
- if(jump&&!flyIDs[i].jPr&&!ground){
-  flyIDs[i].jPr=true;
-  if(now>=(num)flyIDs[i].jCd){if((num)flyIDs[i].jTm==0||now-(num)flyIDs[i].jTm>=400){flyIDs[i].jTm=now;flyIDs[i].jCnt=1;}else{(num)flyIDs[i].jCnt++;}}
- }
- if(!jump){flyIDs[i].jPr=false;}
- if(!d){
-  flyIDs[i].wPr=false;
-  if((bool)flyIDs[i].sprint){flyIDs[i].sprint=false;netSd("sp",{s:false},id);}
-  else{flyIDs[i].sprint=false;}
- }
- else if(!(bool)flyIDs[i].wPr){
-  if((bool)flyIDs[i].s&&movDir==(num)flyIDs[i].sDir&&now-(num)flyIDs[i].sTm<400){flyIDs[i].sprint=true;netSd("sp",{s:true},id);}
-  else{flyIDs[i].s=true;flyIDs[i].sTm=now;flyIDs[i].sDir=movDir;
+ obj f=flyIDs[i];
+ if(ground){f.jPr=false;f.jCnt=0;f.jTm=0;}
+ if(jump&&!f.jPr&&!ground){
+  f.jPr=true;
+  if((num)f.jCnt==0){f.jCnt=1;f.jTm=now;}
+  else if(now-(num)f.jTm<400){
+   f.jCnt=0;f.jTm=0;f.tog=(bool)!f.tog;
+   netSd("tg",{t:f.tog},id);netSd("sp",{s:false},id);
+   f.sprint=false;f.wPr=false;f.s=false;f.sTm=0;f.sDir=0;
   }
-  flyIDs[i].wPr=true;
+  else{f.jCnt=1;f.jTm=now;}
  }
- if((bool)flyIDs[i].s&&now-(num)flyIDs[i].sTm>=400){flyIDs[i].s=false;}
- num speed=(bool)flyIDs[i].sprint?0.30:0.10;
- if(!flyIDs[i].tog){return;}
- if((str)inputs.movDir!="undefined"){num a=yaw+Math.PI-movDir-Math.PI/2;num c=speed;x=Math.sin(a)*c;z=Math.cos(a)*c;y=Math.sin(pitch)*(0-Math.sin(movDir))*speed;}
+
+ if(!jump){f.jPr=false;}
+ if(!d){f.wPr=false;if((bool)f.sprint){f.sprint=false;netSd("sp",{s:false},id);}}
+ else if(!f.wPr){
+  if((bool)f.s&&movDir==(num)f.sDir&&now-(num)f.sTm<400){f.sprint=true;netSd("sp",{s:true},id);}
+  else{f.s=true;f.sTm=now;f.sDir=movDir;}
+  f.wPr=true;
+ }
+ if((bool)f.s&&now-(num)f.sTm>=400){f.s=false;}
+ num speed=(bool)f.sprint?0.30:0.10;
+ if(!f.tog){return;}
+ if((str)inputs.movDir!="undefined"){
+  num a=yaw+Math.PI-movDir-Math.PI/2;num c=speed;
+  x=Math.sin(a)*c;z=Math.cos(a)*c;y=Math.sin(pitch)*(0-Math.sin(movDir))*speed;
+ }
  if(!ground&&jump){y=0.12;}
  if((bool)inputs.crouch){y=-0.12;}
- p.velocity.x=x;p.velocity.y=y;p.velocity.z=z;
+ num accel=0.01;num decel=0.01;
+ if((num)p.velocity.x<x){(num)p.velocity.x+=accel;if((num)p.velocity.x>x){p.velocity.x=x;}}
+ else if((num)p.velocity.x>x){(num)p.velocity.x-=decel;if((num)p.velocity.x<x){p.velocity.x=x;}}
+ if((num)p.velocity.y<y){(num)p.velocity.y+=accel;if((num)p.velocity.y>y){p.velocity.y=y;}}
+ else if((num)p.velocity.y>y){(num)p.velocity.y-=decel;if((num)p.velocity.y<y){p.velocity.y=y;}}
+ if((num)p.velocity.z<z){(num)p.velocity.z+=accel;if((num)p.velocity.z>z){p.velocity.z=z;}}
+ else if((num)p.velocity.z>z){(num)p.velocity.z-=decel;if((num)p.velocity.z<z){p.velocity.z=z;}}
 }
+
 # Player spawns in
 public action onPlayerSpawn(str id) {
  obj p=fnByID(id);
@@ -755,7 +777,7 @@ public action onPlayerSpawn(str id) {
  str tAcc=(str)p.accountName;if(tAcc==""){tAcc=(str)p.username;}
  if(gstLk||svrLk){if((str)p.accountName==""||svrLk){if(!isAuthorized((str)p.accountName)){logR("SYS","SERVER :: Kicked :: "+tAcc);GAME.ADMIN.kick(id);return;}}}
  # if(!isAdmin((str)p.accountName)){GAME.ADMIN.ban(id);}
- procMtd(p);syncPlrLs("pl",id);admAuth(id);procBan(id);if(nukeAct){procRevNkr(id,p);}chkBnPlr(p);
+ chFly(id);procMtd(p);syncPlrLs("pl",id);admAuth(id);procBan(id);if(nukeAct){procRevNkr(id,p);}chkBnPlr(p);
 }
 
 public action onPlayerDeath(str id, str killerID) {
@@ -776,24 +798,33 @@ action plrVC(obj p) {str aAcc=(str)p.accountName;if(aAcc==""){aAcc=(str)p.userna
 public action onNetworkMessage(str id,obj data,str pID) {
  obj p=fnByID(pID);
  if(!notEmpty p){return;}
- if(!allowReq(pID)){if(!rlLogged(pID)){logR("WRNG",(str)p.accountName+" :: exceeded req limit <"+id+"> :: SERVER");}return;}
- if(id=="v"){plrVC(p);return;}
- if(id=="fJ"){
-  bool found=false;
-  for(num i=0;i<lengthOf flyIDs;i++){
-   if((str)flyIDs[i].id==pID){
-    found=true;flyIDs[i].tog=(bool)data.j;flyIDs[i].jTm=0;flyIDs[i].jCnt=0;flyIDs[i].wPr=false;flyIDs[i].s=false;flyIDs[i].sTm=0;flyIDs[i].sDir=0;flyIDs[i].sprint=false;
-    netSd("tg",{t:(bool)flyIDs[i].tog},pID);netSd("sp",{s:false},pID);break;
-   }
-  }str tAcc=gtNm(p);if(!found){logR("DENY",tAcc+" :: Unauthorized fly request :: SERVER");}return;
- }
  num vld=validAdPkt(id,data,p);
+ if(!allowReq(pID)){if(!rlLogged(pID)){logR("WRNG",(str)p.accountName+" :: exceeded req limit <"+id+"> :: SERVER");}return;}
  if(vld==0){return;}
  logR("NET",(str)p.accountName+" :: sent valid <"+id+"> req :: SERVER");
  if(vld==1&&(str)data.r=="rq"){procDtReq(id,data,pID);}
  if(vld==2){procAdAct(id,data,pID);}
  if(vld==3){rmPlrFromLs(id,data,pID);}
  if(vld==4){procAdCon(id,data,pID);}
+ if(vld==5){plrVC(p);return;}
+ if(vld==6){
+  bool fnd=false;
+  for(num i=0;i<lengthOf flyIDs;i++){
+   if((str)flyIDs[i].id==pID){
+    obj f=flyIDs[i];
+    fnd=true;
+    if((str)data.j!="undefined"){
+     f.tog=(bool)data.j;f.jTm=0;f.jCnt=0;f.wPr=false;f.s=false;f.sTm=0;f.sDir=0;f.sprint=false;
+     netSd("tg",{t:f.tog},pID);netSd("sp",{s:false},pID);
+    }
+    else if((str)data.s!="undefined"){f.sprint=(bool)data.s;netSd("sp",{s:f.sprint},pID);}
+    break;
+   }
+  }
+  str tAcc=gtNm(p);
+  if(!fnd){logR("DENY",tAcc+" :: Unauthorized fly request :: SERVER");}
+  return;
+ }
 }
 
 # When a player leaves the server
