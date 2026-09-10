@@ -1,4 +1,4 @@
-# MKS AF v2.5.0
+# MKS AF v2.7.0
 # Client Script 
 # Miekie KrunkerScript Architecture Framework
 
