@@ -1,4 +1,4 @@
-# MKS AF v2.5.8
+# MKS AF v2.5.0
 # Client Script 
 # Miekie KrunkerScript Architecture Framework
 
@@ -8,8 +8,8 @@ str k="";str r="";
 str[] bnLs=str[];str[] mtLs=str[];str[] vipLs=str[];str[] plrLs=str[];str[] tmpAd=str[];str[] tmpRo=str[];
 
 bool adminPanelOpen=false;
-str bg="background:rgba(0,0,0,0.9);";
-str bg1="background:rgba(0,0,0,0.7);";
+str bg="background:rgba(22,22,28,1);";
+str bg1="background:rgba(30,30,37,1);";
 str bg2="background:rgba(153,29,36,1);";
 str fnS="font-size:28px;";
 str fnS1="font-size:15px;";
@@ -23,8 +23,8 @@ str fnPlr="font-size:15px;font-weight:400;";
 str brd="border:2px solid rgba(255,255,255,1);";
 str brdRad="border-radius:10px;";
 str brdRad1="border-radius:20px;";
-str btnBg="rgba(55,55,55,7)";
-str selBg="rgba(100,100,100,1)";
+str btnBg="rgba(40,40,49,1)";
+str selBg="rgba(81,77,97,1)";
 str norBrd="2px solid rgba(255,255,255,7)";
 str selBrd="3px solid rgba(255,255,255,1)";
 
@@ -38,9 +38,9 @@ str ps="position:absolute;";
 str txAlgCen="text-align:center;";
 str st=ps+bx+ov;
 
-str adSelRowBg="rgba(100,100,100,1)";
+str adSelRowBg="rgba(81,77,97,1)";
 str adSelRowBrd="2px solid rgba(255,255,255,1)";
-str adNorRowBg="rgba(50,50,50,0.7)";
+str adNorRowBg="rgba(40,40,49,0.7)";
 str adNorRowBrd="1px solid rgba(255,255,255,0.75)";
 str adSelPlr="";
 
@@ -50,9 +50,9 @@ str[] adminButtonIDs=str[];str[] adminButtonLabels=str[];
 str[] toolIDs=str[];str[] toolLabels=str[];str[] lmgs=str[];str[] smgs=str[];str[] rifles=str[];str[] launchers=str[];str[] pistols=str[];str[] shotguns=str[];str[] special=str[];str[] tools=str[];
 
 str lnHght="line-height:42px;";
-str[] toolBg=str["rgba(168,56,65,1)","rgba(153,29,36,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)",
- "rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(54,54,54,1)","rgba(20,144,170,1)","rgba(20,144,170,1)"];
-str bgBtn="rgba(17,19,42,1)";
+str[] toolBg=str["rgba(168,56,65,1)","rgba(153,29,36,1)","rgba(40,40,49,1)","rgba(40,40,49,1)","rgba(40,40,49,1)","rgba(40,40,49,1)",
+ "rgba(40,40,49,1)","rgba(40,40,49,1)","rgba(40,40,49,1)","rgba(40,40,49,1)","rgb(67,64,79)","rgb(67,64,79)"];
+str bgBtn="rgba(40,40,49,1)";
 num adRytFlash=0;
 num adWepFlash=0;
 
@@ -127,15 +127,15 @@ str[] wepBtnIDs=str[];
 str[] wepNm=str[];
 str adSelWep="";
 
-action clrAdRytSel() {if(adSelRyt!=""){updDIV(adSelRyt,"border",norBrd);if(adSelRyt=="mkAdRytBan"){updDIVTxt(adSelRyt,"BAN");}}adSelRyt="";}
+action clrAdRytSel() {if(adSelRyt!=""){updDIV(adSelRyt,"border",norBrd);if(adSelRyt=="RytBan"){updDIVTxt(adSelRyt,"BAN");}}adSelRyt="";}
 
 action selAdRyt(str id,str act,str lbl) {
  if(adSelRyt!=""){updDIV(adSelRyt,"border",norBrd);
-  if(adSelRyt=="mkAdRytBan"){updDIVTxt(adSelRyt,"BAN");}
+  if(adSelRyt=="RytBan"){updDIVTxt(adSelRyt,"BAN");}
   if(adSelRyt=="mkAdRytMuteAction"||adSelRyt=="mkAdRytBanAction"||adSelRyt=="mkAdRytTAdAction"||adSelRyt=="mkAdRytTRoAction"){updDIVTxt(adSelRyt,"REMOVE");}
  }
  if(adSelWep!=""){updDIV(adSelWep,"border",norBrd);adSelWep="";}
- if(id=="mkAdRytBan"||id=="mkAdRytMuteAction"||id=="mkAdRytBanAction"){
+ if(id=="RytBan"||id=="mkAdRytMuteAction"||id=="mkAdRytBanAction"){
   if(adSelRyt==id){netSd(act,{sI:k,tU:adSelPlr});updDIVTxt(id,lbl);adSelRyt="";return;}
   updDIV(id,"border",adSelRytBrd);
   updDIVTxt(id,"CONFIRM?");
