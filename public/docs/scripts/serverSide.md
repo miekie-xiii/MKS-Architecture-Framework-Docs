@@ -799,14 +799,6 @@ public action onNetworkMessage(str id,obj data,str pID) {
  obj p=fnByID(pID);
  if(!notEmpty p){return;}
  num vld=validAdPkt(id,data,p);
- if(!allowReq(pID)){if(!rlLogged(pID)){logR("WRNG",(str)p.accountName+" :: exceeded req limit <"+id+"> :: SERVER");}return;}
- if(vld==0){return;}
- logR("NET",(str)p.accountName+" :: sent valid <"+id+"> req :: SERVER");
- if(vld==1&&(str)data.r=="rq"){procDtReq(id,data,pID);}
- if(vld==2){procAdAct(id,data,pID);}
- if(vld==3){rmPlrFromLs(id,data,pID);}
- if(vld==4){procAdCon(id,data,pID);}
- if(vld==5){plrVC(p);return;}
  if(vld==6){
   bool fnd=false;
   for(num i=0;i<lengthOf flyIDs;i++){
@@ -825,6 +817,14 @@ public action onNetworkMessage(str id,obj data,str pID) {
   if(!fnd){logR("DENY",tAcc+" :: Unauthorized fly request :: SERVER");}
   return;
  }
+ if(!allowReq(pID)){if(!rlLogged(pID)){logR("WRNG",(str)p.accountName+" :: exceeded req limit <"+id+"> :: SERVER");}return;}
+ if(vld==0){return;}
+ logR("NET",(str)p.accountName+" :: sent valid <"+id+"> req :: SERVER");
+ if(vld==1&&(str)data.r=="rq"){procDtReq(id,data,pID);}
+ if(vld==2){procAdAct(id,data,pID);}
+ if(vld==3){rmPlrFromLs(id,data,pID);}
+ if(vld==4){procAdCon(id,data,pID);}
+ if(vld==5){plrVC(p);return;}
 }
 
 # When a player leaves the server
