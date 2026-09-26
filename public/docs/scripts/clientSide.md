@@ -796,7 +796,8 @@ public action update(num delta) {
 public action render(num delta) {
  if(isFlying){
  obj size=GAME.OVERLAY.getSize();num x=(num)size.width/2;num y=(num)size.height-20;
- GAME.OVERLAY.drawText("Double tap SPACE to fly. Double tap W A S D to boost",x,y,0,12,"center","#FFFFFF",0.8);
+ GAME.OVERLAY.drawText("Fly Scripts Developed by Miekie",x,y-25,0,12,"center","#FFFFFF",0.8);
+ GAME.OVERLAY.drawText("Double tap SPACE to fly. Double tap W A S D to boost",x,y,0,12,"center","#FFFFFF",1);
  }
  rndrcht();
  if(svrEndShow){updDIV("mkSvrEnd","display","block");}else{updDIV("mkSvrEnd","display","none");}
